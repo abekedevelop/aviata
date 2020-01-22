@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Contracts\SearchFlightUrlContract;
+use App\Domain\Context\GetFlightsDataContext;
 use Illuminate\Console\Command;
 
 class RequestFlightPrices extends Command
@@ -38,6 +39,10 @@ class RequestFlightPrices extends Command
      */
     public function handle()
     {
+        $context = app()->make(GetFlightsDataContext::class);
+
+        dd($context);
+
         $client = new \GuzzleHttp\Client();
 
         $searchUrl = SearchFlightUrlContract::SEARCH_FLIGHT_URL;
