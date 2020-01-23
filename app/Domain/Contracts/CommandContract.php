@@ -9,6 +9,12 @@
 namespace App\Domain\Contracts;
 
 
-interface CommandContract extends RunnableContract
+interface CommandContract
 {
+    /**
+     * @param ContextContract $context
+     *
+     * @return ContextContract
+     */
+    public function handle(ContextContract $context): ContextContract;
 }

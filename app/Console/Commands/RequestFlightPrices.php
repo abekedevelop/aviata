@@ -3,7 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Contracts\SearchFlightUrlContract;
+use App\Domain\Common\BaseHandler;
 use App\Domain\Context\GetFlightsDataContext;
+use App\Domain\Handlers\GetFlightDataHandler;
+use App\Helpers\HttpHelper;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Console\Command;
 
@@ -34,26 +37,18 @@ class RequestFlightPrices extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function handle()
     {
-//        $context = app()->make(GetFlightsDataContext::class);
+        /** @var BaseHandler $handler */
+        $handler = app()->make(GetFlightDataHandler::class);
 
-        $client = new \GuzzleHttp\Client();
+        $handler->handle();
 
-        $response = $client->get('https://api.skypicker.com/flights?fly_from=TSE&fly_to=ALA&date_from=18/05/2020&date_to=12/06/2020&partner=picky&v=3',
-                [
-                    'headers' => [
-                        'Accept' => 'application/json',
-                        'Content-Type' => 'application/json'
-                    ],
-                ]
-            );
+        $httpHelper = HttpHelper::getInstance();
 
-        $responseFormatted = json_decode($response->getBody(), true);
-        dd($responseFormatted['data'][1]);
+        $response = $httpHelper->get('https://api.skypicker.com/flights?fly_from=TSE&fly_to=ALA&date_from=18/05/2020&date_to=12/06/2020&partner=picky&v=3');
+
     }
 }
