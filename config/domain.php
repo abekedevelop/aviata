@@ -8,7 +8,9 @@
 
 
 use App\Domain\Common\CommandFactory;
+use App\Domain\Common\ProcessFactory;
 
 return [
     'command_factory' => CommandFactory::class,
+    'process_factory' => ProcessFactory::class,
 ];

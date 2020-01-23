@@ -6,6 +6,8 @@ namespace App\Domain\Common;
 
 use App\Domain\Contracts\ContextContract;
 use App\Domain\Contracts\ProcessContract;
+use App\Domain\Contracts\ProcessFactoryContract;
+use App\Domain\Contracts\Context\Common\BreakContextPartContract;
 
 abstract class BaseProcessCommand extends BaseCommand
 {
@@ -13,11 +15,11 @@ abstract class BaseProcessCommand extends BaseCommand
     protected $processes = [];
 
     /**
-     * @var ProcessFactoryContract
+     * @var ProcessFactoryContract $factory
      */
     protected $factory;
 
-    public function __construct(ProcessFactoryContract $factory, array $process)
+    public function __construct(ProcessFactoryContract $factory, array $process = [])
     {
         $this->factory = $factory;
         $this->processes = array_merge(
@@ -31,7 +33,7 @@ abstract class BaseProcessCommand extends BaseCommand
         foreach ($this->processes as $process) {
             if (class_exists($process)) {
                 $processInstance = $this->factory->make($process);
-                if ($process instanceof ProcessContract) {
+                if ($processInstance instanceof ProcessContract) {
                     $context = $processInstance->run($context);
                     if (
                         $context instanceof BreakContextPartContract

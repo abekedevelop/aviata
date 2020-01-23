@@ -5,7 +5,12 @@ namespace App\Domain\Command;
 
 
 
-class GetFlightDataCommand
-{
+use App\Domain\Common\BaseProcessCommand;
+use App\Domain\Processes\GetFlightData\SetFlightDataProcess;
 
+class GetFlightDataCommand extends BaseProcessCommand
+{
+    protected $processes = [
+        SetFlightDataProcess::class,
+    ];
 }

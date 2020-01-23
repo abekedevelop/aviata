@@ -9,7 +9,12 @@
 namespace App\Domain\Contracts;
 
 
-interface ProcessContract extends RunnableContract
+interface ProcessContract
 {
-
+    /**
+     * @param ContextContract $context
+     *
+     * @return ContextContract
+     */
+    public function run(ContextContract $context): ContextContract;
 }
