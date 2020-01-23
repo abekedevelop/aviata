@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Contracts\SearchFlightUrlContract;
 use App\Domain\Context\GetFlightsDataContext;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Console\Command;
 
 class RequestFlightPrices extends Command
@@ -39,14 +40,20 @@ class RequestFlightPrices extends Command
      */
     public function handle()
     {
-        $context = app()->make(GetFlightsDataContext::class);
-
-        dd($context);
+//        $context = app()->make(GetFlightsDataContext::class);
 
         $client = new \GuzzleHttp\Client();
 
-        $searchUrl = SearchFlightUrlContract::SEARCH_FLIGHT_URL;
+        $response = $client->get('https://api.skypicker.com/flights?fly_from=TSE&fly_to=ALA&date_from=18/05/2020&date_to=12/06/2020&partner=picky&v=3',
+                [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json'
+                    ],
+                ]
+            );
 
-        $response = $client->request('GET', $searchUrl);
+        $responseFormatted = json_decode($response->getBody(), true);
+        dd($responseFormatted['data'][1]);
     }
 }
